@@ -2,12 +2,9 @@ import { LitElement, html, css, unsafeCSS } from 'lit';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement } from 'lit/decorators.js';
 
-import MarkdownStyles from  '../styles/markdown-docs.css';
-
-@customElement('page-docs')
-export class PageDocs extends LitElement {
+@customElement('page-artists')
+export class PageArtists extends LitElement {
   static styles = [
-    unsafeCSS(MarkdownStyles),
     css`
 
       :host > * {

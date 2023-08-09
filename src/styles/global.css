@@ -7,9 +7,9 @@
   --font-family: "IBM Plex Mono", sans-serif;
   --header-bk: rgb(255, 236, 25);
   --header-text: #000;
-  --body-bk: #181818;
+  --body-bk: #070707;
   --header-bar: #2c2e31;
-  --content-max-width: 700px;
+  --content-max-width: 855px;
 }
 
 html, body {

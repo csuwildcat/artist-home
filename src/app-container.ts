@@ -13,20 +13,19 @@ import '@vaadin/app-layout/theme/lumo/vaadin-drawer-toggle.js';
 import '@vaadin/tabs/theme/lumo/vaadin-tabs.js';
 
 import './pages/home';
-import './pages/docs';
-import './pages/settings';
+import './pages/artists';
+import './pages/tickets';
 
 import { Web5 } from '@tbd54566975/web5';
 const { web5, did: userDID } = await Web5.connect();
-localStorage.userDID = JSON.stringify(userDID);
-
 console.log(userDID);
+globalThis.userDID = userDID
 
-// import { Datastore } from './utils/datastore.js';
-// const datastore = globalThis.datastore = new Datastore({
-//   web5: web5,
-//   did: userDID
-// })
+import { Datastore } from './utils/datastore.js';
+const datastore = globalThis.datastore = new Datastore({
+  web5: web5,
+  did: userDID
+})
 
 const BASE_URL: string = (import.meta.env.BASE_URL).length > 2 ? (import.meta.env.BASE_URL).slice(1, -1) : (import.meta.env.BASE_URL);
 
@@ -51,8 +50,9 @@ export class AppContainer extends LitElement {
       }
 
       vaadin-app-layout::part(navbar) {
-        background: rgba(50 50 55 / 100%);
-        box-shadow: 0 0 2px 2px rgba(0 0 0 / 25%);
+        background: #000;
+        border-bottom: 1px solid rgba(255 255 255 / 12%);
+        box-shadow: 0 0 2px 2px rgba(0 0 0 / 20%);
         z-index: 2;
       }
 
@@ -65,12 +65,20 @@ export class AppContainer extends LitElement {
       vaadin-app-layout::part(drawer) {
         width: 14em;
         padding-top: 0.5em;
-        background: rgba(44 44 49 / 100%);
-        border-inline-end: 1px solid rgb(255 255 255 / 2%);
+        background: #000;
+        border-inline-end: 1px solid rgb(255 255 255 / 10%);
       }
 
       vaadin-app-layout vaadin-tab {
         padding: 0.75rem 1.2rem;
+      }
+
+      vaadin-app-layout vaadin-tab[selected] {
+        color: #3fe;
+      }
+
+      vaadin-app-layout vaadin-tab[selected]::before {
+        background-color: #3fe;
       }
 
       vaadin-app-layout vaadin-tab a :first-child {
@@ -98,6 +106,21 @@ export class AppContainer extends LitElement {
         opacity: 1;
         z-index: 1;
         visibility: visible;
+      }
+
+      h1 {
+        display: flex;
+        align-items: center;
+      }
+
+      h1 img {
+        height: 1.75em;
+        margin-right: 0.3em;
+        border-radius: 3px;
+      }
+
+      #my_profile_button {
+        margin: 0 1em 0 auto;
       }
 
       /* main > *[state="active"] {
@@ -148,7 +171,7 @@ export class AppContainer extends LitElement {
   constructor() {
     super();
 
-    this.router = new AppRouter(this, {
+    globalThis.router = this.router = new AppRouter(this, {
       onRouteChange: (enteringRoute) => {
         if (this.nav){
           this.nav.selected = [...this.nav.children].indexOf(this.renderRoot.querySelector(`vaadin-tab a[href="${enteringRoute.path}"]`).parentNode)
@@ -161,12 +184,12 @@ export class AppContainer extends LitElement {
           component: '#home'
         },
         {
-          path: '/docs',
-          component: '#docs'
+          path: '/artists',
+          component: '#artists'
         },
         {
-          path: '/settings',
-          component: '#settings'
+          path: '/tickets',
+          component: '#tickets'
         }
       ]
     });
@@ -202,25 +225,33 @@ export class AppContainer extends LitElement {
           <sl-icon name="list"></sl-icon>
         </vaadin-drawer-toggle>
 
-        <h1 slot="navbar">DWA Starter</h1>
+        <h1 slot="navbar">
+          <img src="/assets/favicons/tidal_logo_225.png">
+          Experience
+        </h1>
+
+        <sl-button id="my_profile_button" variant="default" slot="navbar" size="small" href="/?did=${globalThis.userDID}">
+          <sl-icon slot="prefix" name="person-square"></sl-icon>
+          My Profile
+        </sl-button>
 
         <vaadin-tabs id="global_nav" slot="drawer" orientation="vertical">
           <vaadin-tab>
             <a tabindex="-1" href="/">
-              <sl-icon name="house"></sl-icon>
-              <span>Home</span>
+              <sl-icon name="search"></sl-icon>
+              <span>Explorer</span>
             </a>
           </vaadin-tab>
           <vaadin-tab>
-            <a tabindex="-1" href="/docs">
-              <sl-icon name="file-earmark-text"></sl-icon>
-              <span>Docs</span>
+            <a tabindex="-1" href="/artists">
+              <sl-icon name="star"></sl-icon>
+              <span>Following</span>
             </a>
           </vaadin-tab>
           <vaadin-tab>
-            <a tabindex="-1" href="/settings">
-              <sl-icon name="sliders"></sl-icon>
-              <span>Settings</span>
+            <a tabindex="-1" href="/tickets">
+              <sl-icon name="ticket-perforated"></sl-icon>
+              <span>Tickets</span>
             </a>
           </vaadin-tab>
         </vaadin-tabs>

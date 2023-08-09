@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-@customElement('page-settings')
-export class PageSettings extends LitElement {
+@customElement('page-tickets')
+export class PageTickets extends LitElement {
   static styles = [
     css`
 
