@@ -41,6 +41,7 @@ export class PageHome extends LitElement {
 
       #artist_content {
         margin-top: 2em;
+        padding: 0 2em;
       }
 
       #artist_content:not([editable]) .edit-artist-trigger {
