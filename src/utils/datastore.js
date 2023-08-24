@@ -18,6 +18,10 @@ const anyCanQueryRead = [
   //     "can":"query"
   // },
   {
+    "who":"anyone",
+    "can":"write"
+  },
+  {
       "who":"anyone",
       "can":"read"
   }
@@ -32,7 +36,6 @@ class Datastore {
     this.images = {};
     this.ready = new Promise(resolve => {
       this.getProtocol().then(async response => {
-
         if (response.protocols.length) {
           console.log('existing');
           resolve();
@@ -134,7 +137,7 @@ class Datastore {
       ]);
   }
 
-  async getSocialProfile(did){
+  async getSocialInfo(did){
     if (this.profile.social) return this.profile.social;
     const { records, status } = await this.dwn.records.query({
       from: did,
@@ -155,9 +158,9 @@ class Datastore {
     }
   }
 
-  async setSocialProfile(json){
+  async setSocialInfo(json){
     console.log(globalThis.userDID);
-    const record = await this.getSocialProfile(globalThis.userDID);
+    const record = await this.getSocialInfo(globalThis.userDID);
     console.log(record);
     if (record) {
       return record.update({ data: json })
@@ -166,7 +169,6 @@ class Datastore {
       const { record, status } = await this.dwn.records.create({
         data: json,
         message: {
-          published: true,
           protocol: profileProtocol,
           protocolPath: 'social',
           schema: profileProtocol + '/social',
@@ -206,10 +208,10 @@ class Datastore {
     return null;
   }
 
-  async setImage(type, file, format){
+  async setImage(type, file){
     let record = await this.getImage(type);
     if (record) {
-      record.update({ data: json })
+      record.update({ data: file })
     }
     else {
       const response = await this.dwn.records.create({
@@ -217,7 +219,7 @@ class Datastore {
         message: {
           protocol: profileProtocol,
           protocolPath: type,
-          dataFormat: format
+          dataFormat: file.type
         }
       });
       record = response.record;

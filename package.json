@@ -23,6 +23,7 @@
     "@vaadin/app-layout": "24.0.4",
     "@vaadin/select": "24.0.4",
     "@vaadin/tabs": "^24.0.4",
+    "@vaadin/upload": "^24.0.4",
     "buffer": "^6.0.3",
     "lit": "^2.3.1",
     "rollup-plugin-polyfill-node": "^0.12.0",
